@@ -1,5 +1,6 @@
 #!#!/usr/bin/env python
 
+import json
 import socket
 import fcntl
 import struct
@@ -26,25 +27,54 @@ host = 'idhavea.beer'
 #
 # get_ip_address('en0')
 
-while True:
-    for i in hlist:
-        print(i)
-        
-for host in hlist:
-    command = ['ping', '-c', '5', host]
+def ping(host):
+    command = ['ping', '-t', '3', '-c', '5', host]
     p = Popen(command, stdin=PIPE, stdout=PIPE, stderr=PIPE)
-    output, err = p.communicate(b"input data that is passed to subprocess' stdin")
+    output, err = p.communicate()
     rc = p.returncode
-    # return code 2 = cant connect
+    o_dict = {}
+    o_dict['return_code'] = rc
+    o_dict['output'] = output
+    o_dict['error'] = err
+    return o_dict
+
+def run_diag(host):
+    print('checking shit')
+    check_arp = ['arp', '-a']
+    check_neigh = ['ip', 'neigh']
+    check_host = ['ip', 'neigh', 'show', host]
+
+    # check_list = [check_arp, check_neigh, check_host]
+
+    p = Popen(check_arp, stdin=PIPE, stdout=PIPE, stderr=PIPE)
+    o_dict['arp_table'] = p.communicate()[0]
+
+    p = Popen(check_neigh, stdin=PIPE, stdout=PIPE, stderr=PIPE)
+    o_dict['ip_neighbors'] = p.communicate()[0]
+
+    p = Popen(check_host, stdin=PIPE, stdout=PIPE, stderr=PIPE)
+    o_dict['ip_neigh_explicit'] = p.communicate()[0]
+
+
+    return o_dict
+
+
+for host in hlist:
+    o_dict = ping(host)
+    print(o_dict)
     """ ping return codes? IE should be fine to match against 0
     Success: code 0
     No reply: code 1
     Other errors: code 2 """
-    if rc == 0:
-        print(f'ping successful on {host}')
+
+    if o_dict['return_code'] == 0:
+        continue
+
     else:
-        print(f"couldn't connect to {host}")
-        print(rc, output.decode('utf-8'))
+        print(o_dict['output'])
+        run_diag(host)
+        print(json.dumps(o_dict, indent=4))
+
 
 
 #
