@@ -11,7 +11,7 @@ from subprocess import Popen, PIPE
 
 script, host = argv
 def ping(host):
-    command = ['ping', '-c', '1', host]
+    command = ['ping', '-c', '5', host]
     p = Popen(command, stdin=PIPE, stdout=PIPE, stderr=PIPE)
     output, err = p.communicate()
     rc = p.returncode
@@ -60,14 +60,15 @@ def run(host):
 
         else:
             run_diag(host, o_dict)
-            print(json.dumps(o_dict, indent=4))
             for k,v in o_dict.items():
                 msg = ('{}:\n{}')
                 if not v:
                     v = 'Null'
-                try:
+                if isinstance(v, str):
                     print(msg.format(k,v.decode('utf-8')))
-                except AttributeError:
+
+                else:
+                    print('NOT STRING', isinstance(v, str), k, v )
                     print(msg.format(k,v))
 
 if __name__ == "__main__":
