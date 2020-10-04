@@ -1,6 +1,7 @@
 #!#!/usr/bin/env python
 
 import json
+import logging
 from sys import argv
 
 from subprocess import Popen, PIPE
