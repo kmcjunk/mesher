@@ -87,10 +87,11 @@ def run(host):
                 if not v:
                     v = 'Null'
                 if isinstance(v, str):
-                    print(msg.format(k,v.decode('utf-8')))
+                    logger.error(msg.format(k,v.decode('utf-8')))
 
                 else:
-                    print(msg.format(k,v))
+
+                    logger.error(msg.format(k,v))
 
 if __name__ == "__main__":
     logger = make_logger('mesher')
