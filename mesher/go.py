@@ -2,6 +2,8 @@
 
 import json
 import logging
+import sys
+
 from sys import argv
 
 from subprocess import Popen, PIPE
@@ -14,16 +16,16 @@ from datetime import datetime
 script, host = argv
 
 def make_logger(app):
-    logger = logging.getLogger(app)
     logging.basicConfig(format='%(asctime)s - %(name)s - ' \
                                   '%(levelname)s - %(message)s',
-                    level=logging.INFO,
+                    level=logging.ERROR,
                     datefmt="%Y-%m-%d %H:%M:%S",
                     handlers=[
                             logging.FileHandler(app + '.log'),
                             logging.StreamHandler()
                             ]
                     )
+    logger = logging.getLogger(app)
     return logger
 
 
@@ -74,7 +76,7 @@ def run(host):
 
         if o_dict['ping_rc'] == 0:
             msg = 'Successful 5 count ping to {}'
-            print(msg.format(host))
+            logger.info(msg.format(host))
             continue
 
         else:
