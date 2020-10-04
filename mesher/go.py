@@ -21,7 +21,7 @@ def make_logger(app):
                     level=logging.ERROR,
                     datefmt="%Y-%m-%d %H:%M:%S",
                     handlers=[
-                            logging.FileHandler(app + '.log'),
+                            logging.FileHandler(filename = app + '.log'),
                             logging.StreamHandler()
                             ]
                     )
@@ -77,13 +77,14 @@ def run(host):
         if o_dict['ping_rc'] == 0:
             msg = 'Successful 5 count ping to {}'
             logger.info(msg.format(host))
+            logger.error('fake error emssage, it worked')
             continue
 
         else:
             run_diag(host, o_dict)
-            dt_string = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-            msg = '// {} {}'
-            logger.error(msg.format(dt_string, 'WE GOT A PROBLEM, ITS PACKET LOSS\n'))
+            msg = '{}'
+            print(logger.handlers)
+            logger.error(msg.format('WE GOT A PROBLEM, ITS PACKET LOSS'))
             for k,v in o_dict.items():
                 msg = ('{}:\n{}')
                 if not v:
@@ -97,4 +98,5 @@ def run(host):
 
 if __name__ == "__main__":
     logger = make_logger('mesher')
+    print(logger.handlers)
     run(host)
