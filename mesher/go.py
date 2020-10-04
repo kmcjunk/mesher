@@ -1,13 +1,15 @@
 #!#!/usr/bin/env python
 
 import json
+from sys import argv
 
 from subprocess import Popen, PIPE
 
-host = 'idhavea.beer'
-hlist = ['idhavea.beer', 'google.com', 'myspace.com', 'idhavea.beer']
+# host = 'idhavea.beer'
+# hlist = ['idhavea.beer', 'google.com', 'myspace.com', 'idhavea.beer']
 
 
+script, host = argv
 def ping(host):
     command = ['ping', '-c', '5', host]
     p = Popen(command, stdin=PIPE, stdout=PIPE, stderr=PIPE)
@@ -40,10 +42,12 @@ def run_diag(host):
 
 
 
-def run():
+def run(host):
+    hlist = []
+    hlist.append(host)
     for host in hlist:
         o_dict = ping(host)
-        print(o_dict)
+        print(json.dumps(o_dict, indent=4))
         """ ping return codes? IE should be fine to match against 0
         Success: code 0
         No reply: code 1
@@ -59,4 +63,4 @@ def run():
             print(json.dumps(o_dict, indent=4))
 
 if __name__ == "__main__":
-    run()
+    run(host)
