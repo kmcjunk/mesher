@@ -47,7 +47,6 @@ def run(host):
     hlist.append(host)
     for host in hlist:
         o_dict = ping(host)
-        print(json.dumps(o_dict, indent=4))
         """ ping return codes? IE should be fine to match against 0
         Success: code 0
         No reply: code 1
@@ -68,7 +67,6 @@ def run(host):
                     print(msg.format(k,v.decode('utf-8')))
 
                 else:
-                    print('NOT STRING', isinstance(v, str), k, v )
                     print(msg.format(k,v))
 
 if __name__ == "__main__":
