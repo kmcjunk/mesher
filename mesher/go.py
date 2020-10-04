@@ -63,6 +63,8 @@ def run(host):
             print(json.dumps(o_dict, indent=4))
             for k,v in o_dict.items():
                 msg = ('{}:\n{}')
+                if not v:
+                    v = 'Null'
                 try:
                     print(msg.format(k,v.decode('utf-8')))
                 except AttributeError:
