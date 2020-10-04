@@ -11,7 +11,7 @@ from subprocess import Popen, PIPE
 
 script, host = argv
 def ping(host):
-    command = ['ping', '-c', '5', host]
+    command = ['ping', '-c', '1', host]
     p = Popen(command, stdin=PIPE, stdout=PIPE, stderr=PIPE)
     output, err = p.communicate()
     rc = p.returncode
@@ -63,6 +63,8 @@ def run(host):
             print(json.dumps(o_dict, indent=4))
             for k,v in o_dict.items():
                 print(k,v)
+                msg = ('{}: {}')
+                print(msg.format(k,v.decode('utf-8')))
 
 if __name__ == "__main__":
     run(host)
