@@ -17,7 +17,7 @@ def make_logger(app):
     logger = logging.getLogger(app)
     logging.basicConfig(format='%(asctime)s - %(name)s - ' \
                                   '%(levelname)s - %(message)s',
-                    level=logging.ERROR,
+                    level=logging.INFO,
                     datefmt="%Y-%m-%d %H:%M:%S",
                     handlers=[
                             logging.FileHandler(app + '.log'),
