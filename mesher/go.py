@@ -60,8 +60,8 @@ def run(host):
 
         else:
             run_diag(host, o_dict)
-            print(dt_string, '//\WE GOT A PROBLEM, ITS PACKET LOSS\n')
             dt_string = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+            print(dt_string, '//\WE GOT A PROBLEM, ITS PACKET LOSS\n')
             for k,v in o_dict.items():
                 msg = ('{}:\n{}')
                 if not v:
