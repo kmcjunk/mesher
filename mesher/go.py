@@ -11,7 +11,24 @@ from datetime import datetime
 
 
 script, host = argv
+
+def make_logger(app):
+    logger = logging.getLogger(app)
+    logging.basicConfig(format='%(asctime)s - %(name)s - ' \
+                                  '%(levelname)s - %(message)s',
+                    level=logging.ERROR,
+                    datefmt="%Y-%m-%d %H:%M:%S",
+                    handlers=[
+                            logging.FileHandler(f'{app}.log'),
+                            logging.StreamHandler()
+                            ]
+                    )
+    return logger
+
+
 def ping(host):
+    msg = 'pinging {}'
+    logger.info(msg.format(host))
     command = ['ping', '-c', '5', host]
     p = Popen(command, stdin=PIPE, stdout=PIPE, stderr=PIPE)
     output, err = p.communicate()
@@ -24,7 +41,8 @@ def ping(host):
     return o_dict
 
 def run_diag(host, o_dict):
-    print('checking shit')
+    msg = '{} did not respond to pings, collectin data'
+    logger.info(msg.format(host))
     check_arp = ['arp', '-a']
     check_neigh = ['ip', 'neigh']
     check_host = ['ip', 'neigh', 'show', host]
@@ -44,6 +62,7 @@ def run_diag(host, o_dict):
 
 
 def run(host):
+    logger = make_logger('mesher')
     hlist = []
     hlist.append(host)
     for host in hlist:
@@ -61,7 +80,8 @@ def run(host):
         else:
             run_diag(host, o_dict)
             dt_string = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-            print(dt_string, '//\WE GOT A PROBLEM, ITS PACKET LOSS\n')
+            msg = '// {} {}'
+            logger.error(msg.format(dt_string, 'WE GOT A PROBLEM, ITS PACKET LOSS\n'))
             for k,v in o_dict.items():
                 msg = ('{}:\n{}')
                 if not v:
