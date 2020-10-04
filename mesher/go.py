@@ -62,7 +62,7 @@ def run(host):
             run_diag(host, o_dict)
             print(json.dumps(o_dict, indent=4))
             for k,v in o_dict.items():
-                msg = ('\n{}: {}')
+                msg = ('{}:\n{}')
                 try:
                     print(msg.format(k,v.decode('utf-8')))
                 except AttributeError:
