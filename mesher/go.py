@@ -4,6 +4,7 @@ import json
 from sys import argv
 
 from subprocess import Popen, PIPE
+from datetime import datetime
 
 # host = 'idhavea.beer'
 # hlist = ['idhavea.beer', 'google.com', 'myspace.com', 'idhavea.beer']
@@ -59,6 +60,8 @@ def run(host):
 
         else:
             run_diag(host, o_dict)
+            print(dt_string, '//\WE GOT A PROBLEM, ITS PACKET LOSS\n')
+            dt_string = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
             for k,v in o_dict.items():
                 msg = ('{}:\n{}')
                 if not v:
