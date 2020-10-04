@@ -63,7 +63,6 @@ def run_diag(host, o_dict):
 
 
 def run(host):
-    logger = make_logger('mesher')
     hlist = []
     hlist.append(host)
     for host in hlist:
@@ -94,4 +93,5 @@ def run(host):
                     print(msg.format(k,v))
 
 if __name__ == "__main__":
+    logger = make_logger('mesher')
     run(host)
