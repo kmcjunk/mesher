@@ -22,7 +22,7 @@ def ping(host):
     o_dict['destination'] = host
     return o_dict
 
-def run_diag(host):
+def run_diag(host, o_dict):
     print('checking shit')
     check_arp = ['arp', '-a']
     check_neigh = ['ip', 'neigh']
@@ -59,7 +59,7 @@ def run(host):
             continue
 
         else:
-            run_diag(host)
+            run_diag(host, o_dict)
             print(json.dumps(o_dict, indent=4))
 
 if __name__ == "__main__":
