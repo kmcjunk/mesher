@@ -64,7 +64,10 @@ def run(host):
             for k,v in o_dict.items():
                 print(k,v)
                 msg = ('{}: {}')
-                print(msg.format(k,v.decode('utf-8')))
+                try:
+                    print(msg.format(k,v.decode('utf-8')))
+                except AttributeError:
+                    print(msg.format(k,v))
 
 if __name__ == "__main__":
     run(host)
