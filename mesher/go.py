@@ -47,7 +47,7 @@ def ping(host):
 def run_diag(host, o_dict):
     msg = '{} did not respond to pings, collectin data'
     logger.info(msg.format(host))
-    dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+    dt_string = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     check_arp = ['arp', '-a']
     check_neigh = ['ip', 'neigh']
     check_host = ['ip', 'neigh', 'show', host]
