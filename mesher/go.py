@@ -52,7 +52,7 @@ def run_diag(host, o_dict):
     check_neigh = ['ip', 'neigh']
     check_host = ['ip', 'neigh', 'show', host]
     location = '/root/{}_dump.pcap'
-    tcpdump = ['tcpdump', '-nni', 'eth1', '-c', '3', -s, '65535',
+    tcpdump = ['tcpdump', '-nni', 'eth1', '-c', '3', '-s', '65535',
                '-w', location.format(dt_string)]
 
     p = Popen(check_arp, stdin=PIPE, stdout=PIPE, stderr=PIPE)
