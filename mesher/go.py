@@ -20,11 +20,11 @@ def make_logger(app):
                                   '%(levelname)s - %(message)s',
                     level=logging.ERROR,
                     datefmt="%Y-%m-%d %H:%M:%S",
-                    # handlers=[
-                    #         logging.FileHandler(filename = app + '.log'),
-                    #         logging.StreamHandler()
-                    #         ],
-                    filename= app + '.log'
+                    handlers=[
+                            logging.FileHandler(filename = app + '.log'),
+                            logging.StreamHandler()
+                            ],
+                    # filename= app + '.log'
                     )
     logger = logging.getLogger(app)
     return logger
@@ -52,8 +52,8 @@ def run_diag(host, o_dict):
     check_neigh = ['ip', 'neigh']
     check_host = ['ip', 'neigh', 'show', host]
     location = '/root/{}_dump.pcap'
-    tcpdump = ['tcpdump', '-nni', host, '-w', location.format(dt_string),
-               '-c', '3']
+    tcpdump = ['tcpdump', '-nni', 'eth1', '-c', '3', -s, '65535',
+               '-w', location.format(dt_string)]
 
     p = Popen(check_arp, stdin=PIPE, stdout=PIPE, stderr=PIPE)
     o_dict['arp_table'] = p.communicate()[0]
