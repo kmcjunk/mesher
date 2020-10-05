@@ -89,18 +89,19 @@ def run(host):
 
         else:
             run_diag(host, o_dict)
-            msg = '{}'
-            logger.error(msg.format('WE GOT A PROBLEM, ITS PACKET LOSS'))
-            for k,v in o_dict.items():
-                msg = ('{}:\n{}')
-                if not v:
-                    v = 'Null'
-                if isinstance(v, str):
-                    logger.error(msg.format(k,v.decode('utf-8')))
-
-                else:
-
-                    logger.error(msg.format(k,v))
+            msg = 'event detected\n{}'
+            logger.error(msg.format(o_dict))
+            "don't really need nice logging rn"
+            # for k,v in o_dict.items():
+            #     msg = ('{}:\n{}')
+            #     if not v:
+            #         v = 'Null'
+            #     if isinstance(v, str):
+            #         logger.error(msg.format(k,v.decode('utf-8')))
+            #
+            #     else:
+            #
+            #         logger.error(msg.format(k,v))
 
 if __name__ == "__main__":
     logger = make_logger('mesher')
