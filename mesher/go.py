@@ -2,10 +2,8 @@
 
 import json
 import logging
-import sys
 
 from sys import argv
-
 from subprocess import Popen, PIPE
 from datetime import datetime
 
@@ -48,6 +46,7 @@ def run_diag(host, o_dict):
     msg = '{} did not respond to pings, collectin data'
     logger.info(msg.format(host))
     dt_string = datetime.now().strftime("%H:%M:%S")
+
     check_arp = ['arp', '-a']
     check_neigh = ['ip', 'neigh']
     check_host = ['ip', 'neigh', 'show', host]
@@ -99,13 +98,14 @@ def run(host):
                 "don't really need nice logging rn"
                 # for k,v in o_dict.items():
                 #     msg = ('{}:\n{}')
+                #
                 #     if not v:
                 #         v = 'Null'
+                #
                 #     if isinstance(v, str):
                 #         logger.error(msg.format(k,v.decode('utf-8')))
                 #
                 #     else:
-                #
                 #         logger.error(msg.format(k,v))
 
 if __name__ == "__main__":
