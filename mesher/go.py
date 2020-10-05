@@ -90,7 +90,7 @@ def run(host):
         else:
             run_diag(host, o_dict)
             msg = 'event detected\n{}'
-            logger.error(msg.format(json.dumps(o_dict)))
+            logger.error(msg.format(json.dumps(o_dict, indent=4)))
             "don't really need nice logging rn"
             # for k,v in o_dict.items():
             #     msg = ('{}:\n{}')
