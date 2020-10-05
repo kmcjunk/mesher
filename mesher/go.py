@@ -51,7 +51,7 @@ def run_diag(host, o_dict):
     check_arp = ['arp', '-a']
     check_neigh = ['ip', 'neigh']
     check_host = ['ip', 'neigh', 'show', host]
-    location = '/root/mesher/pcaps/{}_dump.pcap'
+    location = '/root/pcaps/{}_dump.pcap'
     tcpdump = ['tcpdump', '-nni', 'eth1', '-c', '10000', '-s', '65535',
                '-w', location.format(dt_string)]
 
