@@ -20,10 +20,11 @@ def make_logger(app):
                                   '%(levelname)s - %(message)s',
                     level=logging.ERROR,
                     datefmt="%Y-%m-%d %H:%M:%S",
-                    handlers=[
-                            logging.FileHandler(filename = app + '.log'),
-                            logging.StreamHandler()
-                            ]
+                    # handlers=[
+                    #         logging.FileHandler(filename = app + '.log'),
+                    #         logging.StreamHandler()
+                    #         ],
+                    filename= app + '.log'
                     )
     logger = logging.getLogger(app)
     return logger
@@ -46,9 +47,12 @@ def ping(host):
 def run_diag(host, o_dict):
     msg = '{} did not respond to pings, collectin data'
     logger.info(msg.format(host))
+    dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
     check_arp = ['arp', '-a']
     check_neigh = ['ip', 'neigh']
     check_host = ['ip', 'neigh', 'show', host]
+    tcpdump = ['tcpdump', '-nni', host, '-w', dt_string + '_dump.pcap',
+               '-c', '3']
 
     p = Popen(check_arp, stdin=PIPE, stdout=PIPE, stderr=PIPE)
     o_dict['arp_table'] = p.communicate()[0]
@@ -58,6 +62,9 @@ def run_diag(host, o_dict):
 
     p = Popen(check_host, stdin=PIPE, stdout=PIPE, stderr=PIPE)
     o_dict['ip_neigh_explicit'] = p.communicate()[0]
+
+    p = Popen(tcpdump, stdin=PIPE, stdout=PIPE, stderr=PIPE)
+    o_dict['capture_name'] = dt_string + '_dump.pcap'
 
     return o_dict
 
@@ -83,7 +90,6 @@ def run(host):
         else:
             run_diag(host, o_dict)
             msg = '{}'
-            print(logger.handlers)
             logger.error(msg.format('WE GOT A PROBLEM, ITS PACKET LOSS'))
             for k,v in o_dict.items():
                 msg = ('{}:\n{}')
@@ -98,5 +104,5 @@ def run(host):
 
 if __name__ == "__main__":
     logger = make_logger('mesher')
-    print(logger.handlers)
+    print('Logging to ./mesher.log')
     run(host)
