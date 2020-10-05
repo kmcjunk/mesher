@@ -20,11 +20,11 @@ def make_logger(app):
                                   '%(levelname)s - %(message)s',
                     level=logging.ERROR,
                     datefmt="%Y-%m-%d %H:%M:%S",
-                    handlers=[
-                            logging.FileHandler(filename = app + '.log'),
-                            logging.StreamHandler()
-                            ],
-                    # filename= app + '.log'
+                    # handlers=[
+                    #         logging.FileHandler(filename = app + '.log'),
+                    #         logging.StreamHandler()
+                    #         ],
+                    filename= app + '.log'
                     )
     logger = logging.getLogger(app)
     return logger
