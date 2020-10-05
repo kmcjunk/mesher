@@ -87,7 +87,6 @@ def run(host):
             if o_dict['ping_rc'] == 0:
                 msg = 'Successful 5 count ping to {}'
                 logger.info(msg.format(host))
-                logger.error('fake error emssage, it worked')
                 continue
 
             else:
