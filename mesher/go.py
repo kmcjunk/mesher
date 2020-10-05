@@ -67,6 +67,8 @@ def run_diag(host, o_dict):
     p = Popen(tcpdump, stdin=PIPE, stdout=PIPE, stderr=PIPE)
     o_dict['capture_name'] = location.format(dt_string)
 
+    o_dict['event_time'] = dt_string 
+
     return o_dict
 
 
@@ -75,34 +77,36 @@ def run_diag(host, o_dict):
 def run(host):
     hlist = []
     hlist.append(host)
-    for host in hlist:
-        o_dict = ping(host)
-        """ ping return codes? IE should be fine to match against 0
-        Success: code 0
-        No reply: code 1
-        Other errors: code 2 """
+    while True:
+        for host in hlist:
+            o_dict = ping(host)
+            """ ping return codes? IE should be fine to match against 0
+            Success: code 0
+            No reply: code 1
+            Other errors: code 2 """
 
-        if o_dict['ping_rc'] == 0:
-            msg = 'Successful 5 count ping to {}'
-            logger.info(msg.format(host))
-            logger.error('fake error emssage, it worked')
-            continue
+            if o_dict['ping_rc'] == 0:
+                msg = 'Successful 5 count ping to {}'
+                logger.info(msg.format(host))
+                logger.error('fake error emssage, it worked')
+                continue
 
-        else:
-            run_diag(host, o_dict)
-            msg = 'event detected\n{}'
-            logger.error(msg.format(json.dumps(o_dict, indent=4)))
-            "don't really need nice logging rn"
-            # for k,v in o_dict.items():
-            #     msg = ('{}:\n{}')
-            #     if not v:
-            #         v = 'Null'
-            #     if isinstance(v, str):
-            #         logger.error(msg.format(k,v.decode('utf-8')))
-            #
-            #     else:
-            #
-            #         logger.error(msg.format(k,v))
+            else:
+                run_diag(host, o_dict)
+                msg = 'event detected\n{}'
+                logger.error(msg.format(json.dumps(o_dict, indent=4)))
+                print(msg.format(json.dumps(o_dict, indent=4)))
+                "don't really need nice logging rn"
+                # for k,v in o_dict.items():
+                #     msg = ('{}:\n{}')
+                #     if not v:
+                #         v = 'Null'
+                #     if isinstance(v, str):
+                #         logger.error(msg.format(k,v.decode('utf-8')))
+                #
+                #     else:
+                #
+                #         logger.error(msg.format(k,v))
 
 if __name__ == "__main__":
     logger = make_logger('mesher')
