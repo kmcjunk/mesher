@@ -51,8 +51,8 @@ def run_diag(host, o_dict):
     check_arp = ['arp', '-a']
     check_neigh = ['ip', 'neigh']
     check_host = ['ip', 'neigh', 'show', host]
-    location = '/root/{}_dump.pcap'
-    tcpdump = ['tcpdump', '-nni', 'eth1', '-c', '3', '-s', '65535',
+    location = '/root/mesher/pcaps/{}_dump.pcap'
+    tcpdump = ['tcpdump', '-nni', 'eth1', '-c', '10000', '-s', '65535',
                '-w', location.format(dt_string)]
 
     p = Popen(check_arp, stdin=PIPE, stdout=PIPE, stderr=PIPE)
@@ -67,7 +67,7 @@ def run_diag(host, o_dict):
     p = Popen(tcpdump, stdin=PIPE, stdout=PIPE, stderr=PIPE)
     o_dict['capture_name'] = location.format(dt_string)
 
-    o_dict['event_time'] = dt_string 
+    o_dict['event_time'] = dt_string
 
     return o_dict
 
