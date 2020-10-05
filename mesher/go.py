@@ -47,11 +47,12 @@ def ping(host):
 def run_diag(host, o_dict):
     msg = '{} did not respond to pings, collectin data'
     logger.info(msg.format(host))
-    dt_string = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+    dt_string = datetime.now().strftime("%H:%M:%S")
     check_arp = ['arp', '-a']
     check_neigh = ['ip', 'neigh']
     check_host = ['ip', 'neigh', 'show', host]
-    tcpdump = ['tcpdump', '-nni', host, '-w', dt_string + '_dump.pcap',
+    location = '/root/{}_dump.pcap'
+    tcpdump = ['tcpdump', '-nni', host, '-w', location.format(dt_string),
                '-c', '3']
 
     p = Popen(check_arp, stdin=PIPE, stdout=PIPE, stderr=PIPE)
@@ -64,7 +65,7 @@ def run_diag(host, o_dict):
     o_dict['ip_neigh_explicit'] = p.communicate()[0]
 
     p = Popen(tcpdump, stdin=PIPE, stdout=PIPE, stderr=PIPE)
-    o_dict['capture_name'] = dt_string + '_dump.pcap'
+    o_dict['capture_name'] = location.format(dt_string)
 
     return o_dict
 
