@@ -22,7 +22,7 @@ def make_logger(app):
                     #         logging.FileHandler(filename = app + '.log'),
                     #         logging.StreamHandler()
                     #         ],
-                    filename= app + '.log'
+                    filename= '/rackkevin/datadisk/mesher.log'
                     )
     logger = logging.getLogger(app)
     return logger
@@ -50,7 +50,7 @@ def run_diag(host, o_dict):
     check_arp = ['arp', '-a']
     check_neigh = ['ip', 'neigh']
     check_host = ['ip', 'neigh', 'show', host]
-    location = '/root/pcaps/{}_dump.pcap'
+    location = '/rackkevin/datadisk/pcaps/{}_dump.pcap'
     tcpdump = ['tcpdump', '-nni', 'eth1', '-c', '10000', '-s', '65535',
                '-w', location.format(dt_string)]
 
