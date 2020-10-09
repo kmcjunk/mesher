@@ -1,4 +1,4 @@
-#!#!/usr/bin/env python
+#!/usr/bin/env python
 
 import json
 import logging
@@ -9,6 +9,26 @@ from datetime import datetime
 
 # host = 'idhavea.beer'
 # hlist = ['idhavea.beer', 'google.com', 'myspace.com', 'idhavea.beer']
+
+hlist = ['idhavea.beer',
+         'idhavea.beer',
+         'idhavea.beer',
+         'idhavea.beer',
+         'idhavea.beer',
+         'idhavea.beer',
+         'idhavea.beer',
+         'idhavea.beer',
+         'idhavea.beer',
+         'idhavea.beer',
+         'idhavea.beer',
+         'idhavea.beer',
+         'idhavea.beer',
+         'idhavea.beer',
+         'idhavea.beer',
+         'idhavea.beer',
+         'idhavea.beer',
+         'idhavea.beer',
+         ]
 
 
 script, host = argv
@@ -22,7 +42,9 @@ def make_logger(app):
                     #         logging.FileHandler(filename = app + '.log'),
                     #         logging.StreamHandler()
                     #         ],
-                    filename= '/rackkevin/datadisk/mesher.log'
+                    # filename= '/home/rackkevin/datadisk/mesher.log'
+                    filename= '/root/mesher.log'
+
                     )
     logger = logging.getLogger(app)
     return logger
@@ -50,7 +72,9 @@ def run_diag(host, o_dict):
     check_arp = ['arp', '-a']
     check_neigh = ['ip', 'neigh']
     check_host = ['ip', 'neigh', 'show', host]
-    location = '/rackkevin/datadisk/pcaps/{}_dump.pcap'
+    # location = '/home/rackkevin/datadisk/pcaps/{}_dump.pcap'
+    location = '/root/pcaps/{}_dump.pcap'
+
     tcpdump = ['tcpdump', '-nni', 'eth1', '-c', '10000', '-s', '65535',
                '-w', location.format(dt_string)]
 
@@ -73,9 +97,9 @@ def run_diag(host, o_dict):
 
 
 
-def run(host):
-    hlist = []
-    hlist.append(host)
+def run(hlist):
+    # hlist = []
+    # hlist.append(host)
     while True:
         for host in hlist:
             o_dict = ping(host)
@@ -110,4 +134,4 @@ def run(host):
 if __name__ == "__main__":
     logger = make_logger('mesher')
     print('Logging to ./mesher.log')
-    run(host)
+    run(hlist)
