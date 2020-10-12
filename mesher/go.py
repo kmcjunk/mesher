@@ -2,53 +2,69 @@
 
 import json
 import logging
+import argparse
+import threading
+import Queue
 
-from sys import argv
 from subprocess import Popen, PIPE
 from datetime import datetime
 
 # host = 'idhavea.beer'
 # hlist = ['idhavea.beer', 'google.com', 'myspace.com', 'idhavea.beer']
 
-hlist = ['idhavea.beer',
-         'idhavea.beer',
-         'idhavea.beer',
-         'idhavea.beer',
-         'idhavea.beer',
-         'idhavea.beer',
-         'idhavea.beer',
-         'idhavea.beer',
-         'idhavea.beer',
-         'idhavea.beer',
-         'idhavea.beer',
-         'idhavea.beer',
-         'idhavea.beer',
-         'idhavea.beer',
-         'idhavea.beer',
-         'idhavea.beer',
-         'idhavea.beer',
-         'idhavea.beer',
-         ]
+# hlist = ['idhavea.beer',
+#          'idhavea.beer',
+#          'idhavea.beer',
+#          'idhavea.beer',
+#          'idhavea.beer',
+#          'idhavea.beer',
+#          'idhavea.beer',
+#          'idhavea.beer',
+#          'idhavea.beer',
+#          'idhavea.beer',
+#          'idhavea.beer',
+#          'idhavea.beer',
+#          'idhavea.beer',
+#          'idhavea.beer',
+#          'idhavea.beer',
+#          'idhavea.beer',
+#          'idhavea.beer',
+#          'idhavea.beer',
+#          ]
 
-
-script, host = argv
 
 def make_logger(app):
     logging.basicConfig(format='%(asctime)s - %(name)s - ' \
                                   '%(levelname)s - %(message)s',
-                    level=logging.ERROR,
+                    level=logging.INFO,
                     datefmt="%Y-%m-%d %H:%M:%S",
-                    # handlers=[
-                    #         logging.FileHandler(filename = app + '.log'),
-                    #         logging.StreamHandler()
-                    #         ],
-                    # filename= '/home/rackkevin/datadisk/mesher.log'
+                    handlers=[
+                            logging.FileHandler(filename = app + '.log'),
+                            logging.StreamHandler()
+                            ],
                     filename= '/root/mesher.log'
+                    # filename= '/Users/kevi8532/git/mesher/mesher.log'
+
+                    # filename= '/Users/kevi8532/git/mesher/mesher.log'
 
                     )
     logger = logging.getLogger(app)
     return logger
 
+
+def make_args():
+    parser = argparse.ArgumentParser(
+    description='''ping and run diag on list of host''')
+    parser.add_argument('-f', '--file', dest='file', help='file with line'
+                        ' seperated list of ips')
+    args = parser.parse_args()
+    return args
+
+def file_len(fname):
+    with open(fname) as f:
+        for i, l in enumerate(f):
+            pass
+    return i + 1
 
 def ping(host):
     msg = 'pinging {}'
@@ -74,6 +90,7 @@ def run_diag(host, o_dict):
     check_host = ['ip', 'neigh', 'show', host]
     # location = '/home/rackkevin/datadisk/pcaps/{}_dump.pcap'
     location = '/root/pcaps/{}_dump.pcap'
+    # location = '/Users/kevi8532/git/mesher/pcaps/{}_dump.pcap'
 
     tcpdump = ['tcpdump', '-nni', 'eth1', '-c', '10000', '-s', '65535',
                '-w', location.format(dt_string)]
@@ -97,11 +114,11 @@ def run_diag(host, o_dict):
 
 
 
-def run(hlist):
-    # hlist = []
-    # hlist.append(host)
+def run(host):
+    mylist = []
+    mylist.append(host)
     while True:
-        for host in hlist:
+        for host in mylist:
             o_dict = ping(host)
             """ ping return codes? IE should be fine to match against 0
             Success: code 0
@@ -131,7 +148,35 @@ def run(hlist):
                 #     else:
                 #         logger.error(msg.format(k,v))
 
+class ThreadClass(threading.Thread):
+    def __init__(self, queue):
+        threading.Thread.__init__(self)
+        self.queue = queue
+    def run(self):
+        while True:
+            # Pick up job
+            host = self.queue.get()
+            run(host)
+            # End job
+            self.queue.task_done()
+
+
 if __name__ == "__main__":
     logger = make_logger('mesher')
+    args = make_args()
+    hlist = open(args.file,"r")
+    queue = Queue.Queue()
+    n_thread = file_len(args.file)
+    for i in range(n_thread):
+        t = ThreadClass(queue)
+        t.setDaemon(True)
+        t.start()
+
     print('Logging to ./mesher.log')
-    run(hlist)
+    print(n_thread)
+    for line in hlist:
+        print(line)
+        cleanedline = line.strip()
+        queue.put(cleanedline)
+
+    queue.join()
