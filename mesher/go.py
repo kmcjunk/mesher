@@ -10,25 +10,25 @@ from datetime import datetime
 # host = 'idhavea.beer'
 # hlist = ['idhavea.beer', 'google.com', 'myspace.com', 'idhavea.beer']
 
-hlist = ['idhavea.beer',
-         'idhavea.beer',
-         'idhavea.beer',
-         'idhavea.beer',
-         'idhavea.beer',
-         'idhavea.beer',
-         'idhavea.beer',
-         'idhavea.beer',
-         'idhavea.beer',
-         'idhavea.beer',
-         'idhavea.beer',
-         'idhavea.beer',
-         'idhavea.beer',
-         'idhavea.beer',
-         'idhavea.beer',
-         'idhavea.beer',
-         'idhavea.beer',
-         'idhavea.beer',
-         ]
+# hlist = ['idhavea.beer',
+#          'idhavea.beer',
+#          'idhavea.beer',
+#          'idhavea.beer',
+#          'idhavea.beer',
+#          'idhavea.beer',
+#          'idhavea.beer',
+#          'idhavea.beer',
+#          'idhavea.beer',
+#          'idhavea.beer',
+#          'idhavea.beer',
+#          'idhavea.beer',
+#          'idhavea.beer',
+#          'idhavea.beer',
+#          'idhavea.beer',
+#          'idhavea.beer',
+#          'idhavea.beer',
+#          'idhavea.beer',
+#          ]
 
 
 script, host = argv
@@ -43,7 +43,7 @@ def make_logger(app):
                     #         logging.StreamHandler()
                     #         ],
                     # filename= '/home/rackkevin/datadisk/mesher.log'
-                    filename= '/root/mesher.log'
+                    filename= 'mesher.log'
 
                     )
     logger = logging.getLogger(app)
@@ -73,7 +73,7 @@ def run_diag(host, o_dict):
     check_neigh = ['ip', 'neigh']
     check_host = ['ip', 'neigh', 'show', host]
     # location = '/home/rackkevin/datadisk/pcaps/{}_dump.pcap'
-    location = '/root/pcaps/{}_dump.pcap'
+    location = 'pcaps/{}_dump.pcap'
 
     tcpdump = ['tcpdump', '-nni', 'eth1', '-c', '10000', '-s', '65535',
                '-w', location.format(dt_string)]
@@ -97,9 +97,9 @@ def run_diag(host, o_dict):
 
 
 
-def run(hlist):
-    # hlist = []
-    # hlist.append(host)
+def run(host):
+    hlist = []
+    hlist.append(host)
     while True:
         for host in hlist:
             o_dict = ping(host)
@@ -134,4 +134,4 @@ def run(hlist):
 if __name__ == "__main__":
     logger = make_logger('mesher')
     print('Logging to ./mesher.log')
-    run(hlist)
+    run(host)
