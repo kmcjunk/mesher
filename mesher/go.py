@@ -12,30 +12,26 @@ from subprocess import Popen, PIPE
 from datetime import datetime
 
 
-
-# script, host = argv
-
-hlist = ['ip',
-         'ip',
-         'ip',
-         'ip',
+# Don't think this script warrants argparse...so we hardcoding. Don't judge.
+hlist = [$IP1,
+         $IP2
          ]
 
+# Deprecated
 global pid
 
-def make_logger(app):
-    logging.basicConfig(format='%(asctime)s - %(name)s - ' \
-                                  '%(levelname)s - %(message)s',
-                    level=logging.ERROR,
-                    datefmt="%Y-%m-%d %H:%M:%S",
-                    # handlers=[
-                    #         logging.FileHandler(filename = app + '.log'),
-                    #         logging.StreamHandler()
-                    #         ],
-                    filename= 'mesher.log'
-                    # filename= 'mesher.log'
 
-                    )
+def make_logger(app):
+    logging.basicConfig(format='%(asctime)s - %(name)s - '
+                        '%(levelname)s - %(message)s',
+                        level=logging.ERROR,
+                        datefmt="%Y-%m-%d %H:%M:%S",
+                        # handlers=[
+                        #         logging.FileHandler(filename = app + '.log'),
+                        #         logging.StreamHandler()
+                        #         ],
+                        filename='mesher.log'
+                        )
     logger = logging.getLogger(app)
     return logger
 
@@ -54,6 +50,8 @@ def ping(host):
     o_dict['destination'] = host
     return o_dict
 
+
+# Deprecated
 def check_pid(pid):
     print('checkpid')
     ps = 'ps awwffuxxx | grep {}'
@@ -99,8 +97,6 @@ def run_diag(host, o_dict, tcp_pid=None):
     return o_dict
 
 
-
-
 def run(host):
     o_dict = ping(host)
     """ ping return codes? IE should be fine to match against 0
@@ -118,18 +114,7 @@ def run(host):
         msg = 'event detected\n{}'
         logger.error(msg.format(json.dumps(o_dict, indent=4)))
         print(msg.format(json.dumps(o_dict, indent=4)))
-        #     "don't really need nice logging rn"
-            # for k,v in o_dict.items():
-            #     msg = ('{}:\n{}')
-            #
-            #     if not v:
-            #         v = 'Null'
-            #
-            #     if isinstance(v, str):
-            #         logger.error(msg.format(k,v.decode('utf-8')))
-            #
-            #     else:
-            #         logger.error(msg.format(k,v))
+
 
 if __name__ == "__main__":
     logger = make_logger('mesher')
@@ -145,6 +130,6 @@ if __name__ == "__main__":
         pool.terminate()
         pool.join()
     except multiprocessing.TimeoutError as ex:
-            print 'timeout'
+        print 'timeout'
 
     # run(host)
